@@ -1,0 +1,37 @@
+#ifndef GX_GUI_CUBE_ITEM_H
+#define GX_GUI_CUBE_ITEM_H
+
+#include <abstractscene.h>
+
+namespace gx{ namespace gui {
+
+class gl_mesh_geometry  // VERTEX ARRAY COMPONENTS
+{
+    int bind_id
+    gl_mesh_geometry():
+    virtual int bind_id() = 0;
+    virtual GLuint get_triangles_count() = 0;
+    virtual GLfloat* get_vertex_positions_vec3() = 0;
+    virtual GLfloat* get_texture_coordinates_vec2() = 0;
+    virtual GLfloat* get_vertex_normals_vec3() = 0;
+    virtual GLfloat* get_vertex_tangent_normals_vec3() = 0;
+};
+       
+class gl_mesh_drawable  // uniforms and geometry
+{
+    virtual gl_geometry* get_gl_geomerty() const = 0;
+    virtual GLfloat*     get_position_mat4x4() const = 0;
+    virtual GLuint*      get_color_map() const = 0;
+    virtual GLuint*      get_normals_map() const = 0;
+};
+
+}}  // namespace gx::gui
+
+class gx_gui_cube_item: public AbstractScene
+{
+    void initialize(QOpenGLContext* context);
+    void render();
+    void resize(int width, int height);
+};
+
+#endif // GX_GUI_CUBE_ITEM_H

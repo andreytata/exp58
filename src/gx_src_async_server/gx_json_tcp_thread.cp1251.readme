@@ -1,0 +1,114 @@
+Компонент асинхронного TCP сервера. Решает проблему асинхронной параллельной обработки
+множества входящих запросов. При разработке этого сервера приоритетом являлась простота
+подключения этого компонента к готовому консольному или графическому QT5 приложению.
+Очень часто нужно подключить сервер к приложению для реализации удаленной отладки,
+мониторинга, инспекции каких-то значений, прочее. С другой стороны этот компонент может
+применяться как основной компонент приложения, например  для реализации полноценного TCP
+или HTTP сервера. Файл "gx_json_tcp_thread.h" содержит расширения абстрактных сервера и
+реактора из "gx_src_async_server.h". Тест базовой функциональности мультизадачного JSON
+парсера входящих запросов, находится в "../src/howto_async_server". howto_async_server
+ - пример использования компонента, его расширения и набор его тестов.
+
+                                                    this_json_item_can_be_used_as_gdom_key;
+                                                    
+
+                                                    //bool acceptable = p_gdom->is_acceptable_query_type()
+
+
+                                                    // accepted type of the each path segm, depend p_item type, so we need visitor
+                                                    /*struct operation_t: gx::gdom::proc
+                                                    {
+                                                        gx::json* p_segm;  // valuable pointer to json item with unknown type
+                                                        gx::gdom* p_next;  // uninited pointer to gdom item with unknown type
+                                                        std::string fail;  // if NULL is p_next, error info collected here are
+
+                                                        void on(gx::dict* o)  // Refs std::map<gx::name, gx::slot>
+                                                        {
+                                                            struct : gx_json_type_error_t
+                                                            {
+                                                                gx::dict*    p_dict;
+                                                                gx::gdom*    p_next;
+                                                                std::string  failed_key_as_string;
+                                                                void on(gx::json::CSTR*j) {  // clean error
+                                                                    gx::slot* p_slot = p_dict->get_slot( j->value.c_str() );
+                                                                    if (NULL == p_slot )
+                                                                    {
+                                                                        // store failed key for restore error info
+                                                                        failed_key_as_string += j->value.c_str();
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                        p_next = p_slot->get_gdom();
+                                                                    }
+                                                                }
+                                                            }
+                                                            use_unknown_json_item_as_gdom_dict_key;
+                                                            use_unknown_json_item_as_gdom_dict_key.p_dict = o;
+                                                            use_unknown_json_item_as_gdom_dict_key.p_next = 0;
+                                                            p_segm->on( &use_unknown_json_item_as_gdom_dict_key );
+                                                            p_next = use_unknown_json_item_as_gdom_dict_key.p_next;
+                                                            if( NULL == p_next )  // format error info
+                                                            {
+                                                                if( use_unknown_json_item_as_gdom_dict_key.type_error() )
+                                                                {
+                                                                    // invalid type used as key
+                                                                    fail += "TYPE_ERROR:can't use '";
+                                                                    fail += use_unknown_json_item_as_gdom_dict_key.type_error();
+                                                                    fail += "' as gdom 'dict' key";
+                                                                }
+                                                                else
+                                                                {
+                                                                    // type of the key is correct, but slot with this
+                                                                    fail += "KEY_ERROR:key '";
+                                                                    fail += use_unknown_json_item_as_gdom_dict_key.failed_key_as_string;
+                                                                    fail += "' not found in gdom 'dict'";
+                                                                }
+                                                            }
+                                                        }
+                                                        void on(gx::none*)  // Like Python's "None"
+                                                        {
+                                                            fail += "PATH_ERROR: 'none' is not iterable";
+                                                        }
+                                                        void on(gx::m4x4*)  // real matrix 4x4 buff
+                                                        {
+                                                            fail += "PATH_ERROR: 'm4x4' is not iterable";
+                                                        }
+                                                        void on(gx::r5va*)  // float buffer   glm::float32_t
+                                                        {
+                                                            fail += "PATH_ERROR: 'r5va' is not iterable";
+                                                        }
+                                                        void on(gx::r6va*)  // double buffer  glm::float64_t
+                                                        {
+                                                            fail += "PATH_ERROR: 'r6va' is not iterable";
+                                                        }
+                                                        void on(gx::i5vs*)  // int 32 signed;
+                                                        {
+                                                            fail += "PATH_ERROR: 'i5vs' is not iterable";
+                                                        }
+                                                        void on(gx::i5vu*)  // int 32 unsigned;
+                                                        {
+                                                            fail += "PATH_ERROR: 'i5vu' is not iterable";
+                                                        }
+                                                        void on(gx::i3vu*)  // text ASCII 8-bit unsigned;
+                                                        {
+                                                            fail += "PATH_ERROR: 'i3vu' is not iterable";
+                                                        }
+                                                    }
+                                                    operation;
+                                                    operation.p_segm = *segm;
+                                                    operation.p_next = NULL;
+                                                    p_gdom->on(&operation);
+                                                    if( operation.p_next )
+                                                    {
+                                                        p_gdom = operation.p_next;
+                                                    }
+                                                    else
+                                                    {
+                                                        qDebug() << this->socket() << "json_ready_read() => [HTTP_GET_REQUEST]/Path item"
+                                                                 << i
+                                                                 << "=> " << operation.fail.c_str();
+                                                        p_gdom = NULL;
+                                                        break;
+                                                    }
+                                                    */
+                                                    

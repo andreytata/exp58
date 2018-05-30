@@ -1,0 +1,104 @@
+#include <gx_gui_cube_item.h>
+
+struct cube: gx::view::mesh {
+	GLuint getTrianglesCount() { return 36; }
+	GLfloat* getVertices3() {
+		static GLfloat Vertices[] = {
+			-0.5f,  0.5f,  0.5f,    0.5f, -0.5f,  0.5f,    -0.5f, -0.5f,  0.5f,
+			 0.5f, -0.5f,  0.5f,   -0.5f,  0.5f,  0.5f,     0.5f,  0.5f,  0.5f,
+			-0.5f, -0.5f, -0.5f,    0.5f, -0.5f, -0.5f,    -0.5f,  0.5f, -0.5f,
+			 0.5f,  0.5f, -0.5f,   -0.5f,  0.5f, -0.5f,     0.5f, -0.5f, -0.5f,
+
+			 0.5f, -0.5f, -0.5f,    0.5f, -0.5f,  0.5f,     0.5f,  0.5f, -0.5f,
+			 0.5f,  0.5f,  0.5f,    0.5f,  0.5f, -0.5f,     0.5f, -0.5f,  0.5f,
+			-0.5f,  0.5f, -0.5f,   -0.5f, -0.5f,  0.5f,    -0.5f, -0.5f, -0.5f,
+			-0.5f, -0.5f,  0.5f,   -0.5f,  0.5f, -0.5f,    -0.5f,  0.5f,  0.5f,
+
+			 0.5f,  0.5f, -0.5f,   -0.5f,  0.5f,  0.5f,    -0.5f,  0.5f,  -0.5f,
+			-0.5f,  0.5f,  0.5f,    0.5f,  0.5f, -0.5f,     0.5f,  0.5f,   0.5f,
+			-0.5f, -0.5f, -0.5f,   -0.5f, -0.5f,  0.5f,     0.5f, -0.5f,  -0.5f,
+			 0.5f, -0.5f,  0.5f,    0.5f, -0.5f, -0.5f,    -0.5f, -0.5f,   0.5f
+		};
+		return Vertices;
+	}
+	GLfloat* getTexCoord2() {
+		static GLfloat TexCoord[] = {
+			0.0f, 0.0f,   1.0f, 1.0f,   1.0f, 0.0f,
+			1.0f, 1.0f,   0.0f, 0.0f,   0.0f, 1.0f,
+			1.0f, 1.0f,   1.0f, 0.0f,   0.0f, 1.0f,
+			0.0f, 0.0f,   0.0f, 1.0f,   1.0f, 0.0f,
+
+			1.0f, 1.0f,   1.0f, 0.0f,   0.0f, 1.0f,
+			0.0f, 0.0f,   0.0f, 1.0f,   1.0f, 0.0f,
+			0.0f, 0.0f,   1.0f, 1.0f,   1.0f, 0.0f,
+			1.0f, 1.0f,   0.0f, 0.0f,   0.0f, 1.0f,
+
+			0.0f, 1.0f,   1.0f, 0.0f,   1.0f, 1.0f,
+			1.0f, 0.0f,   0.0f, 1.0f,   0.0f, 0.0f,
+			1.0f, 0.0f,   1.0f, 1.0f,   0.0f, 0.0f,
+			0.0f, 1.0f,   0.0f, 0.0f,   1.0f, 1.0f
+		}; return TexCoord;
+	}
+	GLfloat* getNormals3(){
+		static GLfloat Normals[] = {
+			0,0,-1,    0,0,-1,    0,0,-1,
+			0,0,-1,    0,0,-1,    0,0,-1,
+			0,0,1,     0,0,1,     0,0,1,
+			0,0,1,     0,0,1,     0,0,1,
+
+			-1,0,0,   -1,0,0,    -1,0,0,
+			-1,0,0,   -1,0,0,    -1,0,0,
+			1,0,0,     1,0,0,     1,0,0,
+			1,0,0,     1,0,0,     1,0,0,
+
+			0,-1,0,    0,-1,0,    0,-1,0,
+			0,-1,0,    0,-1,0,    0,-1,0,
+			0,1,0,      0,1,0,    0,1,0,
+			0,1,0,      0,1,0,    0,1,0
+		}; return Normals;
+	}
+	GLfloat* getTNormals3() {
+		GLfloat* n3=getNormals3();
+		static bool ready = false;
+		static GLfloat t3[] = {
+			0,0,0,     0,0,0,     0,0,0,
+			0,0,0,     0,0,0,     0,0,0,
+			0,0,0,     0,0,0,     0,0,0,
+			0,0,0,     0,0,0,     0,0,0,
+
+			0,0,0,     0,0,0,     0,0,0,
+			0,0,0,     0,0,0,     0,0,0,
+			0,0,0,     0,0,0,     0,0,0,
+			0,0,0,     0,0,0,     0,0,0,
+
+			0,0,0,     0,0,0,     0,0,0,
+			0,0,0,     0,0,0,     0,0,0,
+			0,0,0,     0,0,0,     0,0,0,
+			0,0,0,     0,0,0,     0,0,0,
+		};
+		if(!ready){
+			const QVector3D a(0.0f, 0.0f, 1.0f);
+			const QVector3D b(0.0f, 0.1f, 0.0f);
+			for( int n=0; n<36; n++ ) {
+				GLfloat* norm = ( n3 + 3*n );
+				GLfloat* tang = ( t3 + 3*n );
+				QVector3D aNormal( norm[0], norm[1], norm[2] );
+				QVector3D c1 = QVector3D::crossProduct ( aNormal, a );
+				QVector3D c2 = QVector3D::crossProduct ( aNormal, b );
+				if( c1.lengthSquared() > c2.lengthSquared() ){
+					c1.normalize();
+					tang[0] = GLfloat(c1.x());
+					tang[1] = GLfloat(c1.y());
+					tang[2] = GLfloat(c1.z());
+				} else {
+					c1.normalize();
+					tang[0] = GLfloat(c1.x());
+					tang[1] = GLfloat(c1.y());
+					tang[2] = GLfloat(c1.z());
+				}
+			}
+			ready=true;
+		}
+		return t3;
+	}
+};
