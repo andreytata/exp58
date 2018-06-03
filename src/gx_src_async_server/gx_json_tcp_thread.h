@@ -51,6 +51,10 @@ class gx_json_tcp_thread: public gx_async_tcp_reactor
 {
     class abstract_state
     {
+    // Each instance of the gx_json_tcp_thread class delegate each call of self interface methods to
+    // instance of self current state, with pointer to self as first parameter. (GOF, State Machine).
+    // where current state defined as gx_json_tcp_thread's member with type "pointer to abstract_state"
+
     public:
         virtual ~abstract_state(){}
         virtual void disconnect(gx_json_tcp_thread*)=0;
@@ -71,9 +75,12 @@ class gx_json_tcp_thread: public gx_async_tcp_reactor
 
     class wait_size_state_t: public abstract_state
     {
+        // This method are not part of the State Machine signal interface.
+        // Normal way to use gx_json_tcp_thread: JSON request => JSON result.
+        // This is some utilite method to convert HTTP-GET-REQUEST to JSON request.
        QString json_dumps_get_request(const QHttpRequestHeader& request)
        {
-           QString dump;
+           QString dump;  // JSON text accomulate here ( COW supported? )
            dump += "{\"Json\":\"HTTP_GET_REQUEST\"\n";        // set base interface
 
            QStringList keys = request.keys();
